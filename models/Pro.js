@@ -18,7 +18,7 @@ const profSchema = new Schema({
     dob: String,
 		gallery: Array,
 		photo: String,
-		ocupation: String,
+		occupation: String,
 		locationname: String,
 		location: {
 		   type: { type: String,default: 'Point', enum: ['Point'] },
