@@ -12,6 +12,8 @@ var Prof = require(__dirname + '/../models/Pro');
 var Category = require(__dirname + '/../models/Category');
 var Group = require(__dirname + '/../models/Group');
 
+var config = require(__dirname + '/../config.json');
+
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './public/uploads/')
@@ -48,7 +50,7 @@ router.post('/user/create',function(req, res){
         qs:
          { app: 'ws',
            u: 'Kev',
-           h: '0b7d5fc3872a84e45bf6b949603a3724',
+           h: config.sms_key,
            op: 'pv',
            to: user.phone,
            msg: 'OTP code is: '+ code } };
@@ -96,8 +98,8 @@ router.post('/user/generateotp',function(req, res){
             url: 'http://infopi.io/text/index.php',
             qs:
              { app: 'ws',
-               u: 'Goodlife',
-               h: '0b7d5fc3872a84e45bf6b949603a3724',
+               u: 'Kev',
+               h: config.sms_key,
                op: 'pv',
                to: d.phone,
                msg: 'OTP code is: '+ code },
