@@ -41,7 +41,6 @@ router.post('/user/create',function(req, res){
     otp: code
   },function(err, user){
     if(err){
-      console.log(err);
       res.json({code: 101, err: err});
     }else{
       var options = { method: 'GET',
@@ -49,7 +48,7 @@ router.post('/user/create',function(req, res){
         qs:
          { app: 'ws',
            u: 'Kev',
-           h: 'a425d383d0af9d75a9ab1db94747e441',
+           h: '0b7d5fc3872a84e45bf6b949603a3724',
            op: 'pv',
            to: user.phone,
            msg: 'OTP code is: '+ code } };
@@ -98,7 +97,7 @@ router.post('/user/generateotp',function(req, res){
             qs:
              { app: 'ws',
                u: 'Goodlife',
-               h: 'a425d383d0af9d75a9ab1db94747e441',
+               h: '0b7d5fc3872a84e45bf6b949603a3724',
                op: 'pv',
                to: d.phone,
                msg: 'OTP code is: '+ code },
