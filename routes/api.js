@@ -11,6 +11,7 @@ var User = require(__dirname + '/../models/User');
 var Prof = require(__dirname + '/../models/Pro');
 var Category = require(__dirname + '/../models/Category');
 var Group = require(__dirname + '/../models/Group');
+var Order = require(__dirname + '/../models/Order');
 
 var config = require(__dirname + '/../config.json');
 
@@ -200,6 +201,29 @@ router.post('/prof/uploadGalleryPhoto/:id',cpUpload,function(req, res){
     });
   })
 });
+
+
+router.post('/order/create',function(req, res){
+  Order.create({
+    category: req.body.category,
+		destination: req.body.destination,
+    distance: req.body.distance,
+    duration: req.body.duration,
+    items: req.body.items,
+    price: req.body.price,
+    source: req.body.source,
+		usernames: req.body.usernames,
+    userphone: req.body.userphone
+  },function(err, order){
+    if(err){
+      res.json({code: 101, err: err});
+    }else{
+      res.json({code:100, msg: "Order stored successfully"});
+    }
+  });
+});
+
+
 
 router.post('/prof/call_log/:id',function(req, res){
   Prof.findById(req.params.id).then(function(p){
