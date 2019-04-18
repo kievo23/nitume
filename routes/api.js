@@ -204,6 +204,7 @@ router.post('/prof/uploadGalleryPhoto/:id',cpUpload,function(req, res){
 
 
 router.post('/order/create',function(req, res){
+  console.log(req.body);
   Order.create({
     category: req.body.category,
 		destination: req.body.destination,
