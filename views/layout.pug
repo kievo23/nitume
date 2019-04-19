@@ -3,6 +3,10 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
-    script(src="https://js.pusher.com/4.4/pusher.min.js")
+    link(rel="stylesheets" href="/stylesheets/pretty-print-json.css")
+    script(src="https://code.jquery.com/jquery-3.3.1.min.js" 
+          integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" 
+          crossorigin="anonymous")
+  script(src="/javascripts/pretty-print-json.min.js")
   body
     block content

@@ -5,14 +5,4 @@ block content
   p Welcome to #{title}
   
   script.
-    Pusher.logToConsole = true;
-
-    var pusher = new Pusher('e4add9536654e5c1ee4a', {
-      cluster: 'eu',
-      forceTLS: true
-    });
-
-    var channel = pusher.subscribe('nitume');
-    channel.bind('new-order', function(data) {
-      alert(JSON.stringify(data));
-    });
+    

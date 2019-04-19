@@ -215,7 +215,8 @@ router.post('/order/create',function(req, res){
     price: req.body.price,
     source: req.body.source,
 		usernames: req.body.usernames,
-    userphone: req.body.userphone
+    userphone: req.body.userphone,
+    date: new Date()
   },function(err, order){
     if(err){
       res.json({code: 101, err: err});
@@ -237,7 +238,7 @@ router.post('/order/create',function(req, res){
         "price" : req.body.price,
         "items" : req.body.items,
         "source" : req.body.source,
-        "destination" : req.body.destination 
+        "destination" : req.body.destination
       });
       res.json({code:100, msg: "Order Uploaded successfully"});
     }

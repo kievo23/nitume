@@ -15,7 +15,8 @@ const ordersSchema = new Schema({
     price: String,
     source: Object,
 		usernames: String,
-    userphone: String
+    userphone: String,
+    date: Date
 });
 
 module.exports = mongoose.model('Orders', ordersSchema);
