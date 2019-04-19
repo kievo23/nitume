@@ -234,7 +234,10 @@ router.post('/order/create',function(req, res){
         "distance" : req.body.distance,
         "duration" : req.body.duration,
         "category" : req.body.category,
-        "price" : req.body.price 
+        "price" : req.body.price,
+        "items" : req.body.items,
+        "source" : req.body.source,
+        "destination" : req.body.destination 
       });
       res.json({code:100, msg: "Order Uploaded successfully"});
     }
