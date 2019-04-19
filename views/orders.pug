@@ -6,7 +6,8 @@ block content
     pre#orders
     .orders 
       each order in orders 
-        =order.date
+        strong
+          =order.date
         ul
           li
             | Category: 
@@ -15,7 +16,7 @@ block content
             | Charge: 
             =order.price
           li
-            | Distance:
+            | Distance: 
             =order.distance
           li
             | Source: 
@@ -28,7 +29,8 @@ block content
             each item in order.items
               tr
                 td
-                  =item.title
+                  strong
+                    =item.title
                 td
                   =item.desc
         hr

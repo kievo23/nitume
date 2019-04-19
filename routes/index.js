@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/orders', function(req, res, next) {
-  Order.find({},{'_id': 0,'_v': 0}).populate('group').then(function(d){
+  Order.find({},{'_id': 0,'_v': 0}).sort({"date": -1}).then(function(d){
     res.render('orders', { title: 'Nitume Orders',orders: d });
   })
 
