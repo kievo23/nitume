@@ -6,6 +6,7 @@ var Jimp = require("jimp");
 var slug = require('slug');
 var multer  = require('multer');
 var mime = require('mime');
+var Pusher = require('pusher');
 
 var User = require(__dirname + '/../models/User');
 var Prof = require(__dirname + '/../models/Pro');
@@ -204,7 +205,7 @@ router.post('/prof/uploadGalleryPhoto/:id',cpUpload,function(req, res){
 
 
 router.post('/order/create',function(req, res){
-  console.log(req.body);
+  //console.log(req.body);
   Order.create({
     category: req.body.category,
 		destination: req.body.destination,
@@ -219,7 +220,23 @@ router.post('/order/create',function(req, res){
     if(err){
       res.json({code: 101, err: err});
     }else{
-      res.json({code:100, msg: "Order stored successfully"});
+      var pusher = new Pusher({
+        appId: '756519',
+        key: 'e4add9536654e5c1ee4a',
+        secret: '7bdb9b873881fb753fcb',
+        cluster: 'eu',
+        encrypted: true
+      });
+
+      pusher.trigger('nitume', 'new-order', {
+        "message": "new Order Received",
+        "phone" : req.body.userphone,
+        "distance" : req.body.distance,
+        "duration" : req.body.duration,
+        "category" : req.body.category,
+        "price" : req.body.price 
+      });
+      res.json({code:100, msg: "Order Uploaded successfully"});
     }
   });
 });
