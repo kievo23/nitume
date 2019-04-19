@@ -24,6 +24,12 @@ block content
           li
             | Destination: 
             =order.destination.placename
+          li
+            | Customer: 
+            =order.usernames
+          li
+            | Phone: 
+            =order.userphone
         p
           table
             each item in order.items
