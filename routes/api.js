@@ -123,32 +123,6 @@ router.post('/user/generateotp',function(req, res){
   });
 });
 
-router.post('/prof/uploadProfilePhoto/:id',cpUpload,function(req, res){
-  Prof.findById(req.params.id).then(function(p){
-    //console.log(p);
-    if (req.files['photo']){
-		  p.photo = req.files['photo'][0].filename;
-		}
-    p.save(function(err){
-      if(err){
-        console.log(err);
-        res.json({code:101, msg: "error happened"});
-      }else{
-        if (req.files['photo']){
-          Jimp.read("./public/uploads/"+p.photo).then(function (cover) {
-            return cover.resize(200, 140)     // resize
-               .quality(100)                // set greyscale
-               .write("./public/uploads/profs/thumbs/"+p.photo); // save
-          }).catch(function (err) {
-            console.error(err);
-          });
-        }
-        res.json({code:100, msg: "Changes made",profilePhoto:p.photo});
-      }
-    });
-  })
-});
-
 router.post('/addreview',function(req, res){
   Prof.findById(req.body.profid).then(function(p){
     x = {};
@@ -169,41 +143,6 @@ router.post('/addreview',function(req, res){
   });
 });
 
-router.post('/prof/uploadGalleryPhoto/:id',cpUpload,function(req, res){
-  Prof.findById(req.params.id).then(function(p){
-    //console.log(p);
-    var gallery = [];
-    //console.log(req.files);
-    if(req.files['gallery']){
-      req.files['gallery'].forEach(function(x){
-        x.info = req.body.info;
-        x.date = new Date();
-        p.gallery.push(x);
-      });
-		}
-    p.save(function(err){
-      if(err){
-        console.log(err);
-        res.json({code:101, msg: "error happened"});
-      }else{
-        if(p.gallery){
-          p.gallery.forEach(function(gallery) {
-              Jimp.read("./public/uploads/"+gallery.filename).then(function (cover) {
-                return cover.resize(200, 140)     // resize
-                     .quality(100)                 // set JPEG quality
-                     .write("./public/uploads/profs/thumbs/"+gallery.filename); // save
-            }).catch(function (err) {
-                console.error(err);
-            });
-          });
-        }
-        res.json({code:100, msg: "Changes made",gallery:p.gallery});
-      }
-    });
-  })
-});
-
-
 router.post('/order/create',function(req, res){
   //console.log(req.body);
   Order.create({
@@ -216,6 +155,7 @@ router.post('/order/create',function(req, res){
     source: req.body.source,
 		usernames: req.body.usernames,
     userphone: req.body.userphone,
+    status: 0,
     date: new Date()
   },function(err, order){
     if(err){
@@ -289,6 +229,15 @@ router.post('/prof/create',cpUpload,function(req, res){
         res.json({code: 100, user: user});
       }
     });
+});
+
+router.post('/myorders', function(req, res, next) {
+  var phone = req.body.phone.replace(/\s+/g, '');
+  phone = "254"+phone.substr(phone.length - 9);
+  Order.find({userphone: phone},{'_id': 0,'_v': 0}).sort({"date": -1}).then(function(d){
+    res.json(d);
+  })
+
 });
 
 //Edit prof location
@@ -403,48 +352,6 @@ router.post('/user/verifyfb',function(req, res){
   });
 });
 
-router.post('/user/verifyg',function(req, res){
-  User.findOne({
-    googleid: req.body.googleid
-  },function(err, user){
-    if(err){
-      console.log(err);
-      res.json({code: 101, err: err});
-    }else{
-      if(user){
-        res.json({code: 100, msg: "User Found", user: user});
-      }else{
-        res.json({code: 101, msg: "User Not Found", user: user});
-      }
-    }
-  });
-});
-
-//DELETE PHOTO FROM GALLERY
-router.post('/deletephoto/:id', function(req, res){
-		Prof.findOne({
-		  _id: req.params.id
-		})
-		.then(function(data){
-      var result = data.gallery.filter(function(e, i) {
-        //console.log(e.filename);
-        return e.filename != req.body.photo;
-      });
-      data.gallery = result;
-      //console.log(result);
-      data.save(function(err){
-  			if(err)
-  				res.json({code: 101, msg: err});
-  			res.json({code: 100, msg: "deleted gallery photo successfully"});
-  		});
-		  //res.redirect('/dashboard');
-		})
-		.catch(function(err){
-		    console.log(err);
-        res.json({code: 100, msg: err});
-		});
-});
-
 /*
 router.post('/nearby', function(req, res){
   var point = { type : "Point", coordinates : [parseFloat(req.body.longitude),parseFloat(req.body.latitude)] };
@@ -461,38 +368,5 @@ router.post('/nearby', function(req, res){
     });
    });
 });*/
-
-router.get('/prof/categories', function(req, res){
-  Category.find({}).populate('group').then(function(d){
-    res.json({categories: d});
-  })
-});
-
-router.get('/prof/groups', async(req, res) => {
-  var groups = Group.find({});
-  var categories = Category.find({});
-  var profs = Prof.find({approved: true});
-  Promise.all([groups, categories, profs]).then(values => {
-    for (var i = 0; i < values[0].length; i++) {
-      for (var j = 0; j < values[1].length; j++) {
-        if(values[0][i].id == values[1][j].group){
-          for(var k = 0; k < values[2].length; k++){
-            if(values[1][j].id == values[2][k].jobtype){
-              values[1][j].profs.push(values[2][k]);
-            }
-          }
-          if(values[1][j].profs.length == 0){
-            //console.log("zero");
-            delete values[1][j].profs;
-          }
-          values[0][i].children.push(values[1][j]);
-        }
-      }
-    }
-    //console.log(values[0]);
-    res.json({groups: values[0]});
-  });
-
-});
 
 module.exports = router;

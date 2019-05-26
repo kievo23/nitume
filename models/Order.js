@@ -16,6 +16,7 @@ const ordersSchema = new Schema({
     source: Object,
 		usernames: String,
     userphone: String,
+		status: Number,
     date: Date
 });
 
