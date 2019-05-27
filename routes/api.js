@@ -232,12 +232,15 @@ router.post('/prof/create',cpUpload,function(req, res){
 });
 
 router.post('/myorders', function(req, res, next) {
-  var phone = req.body.phone.replace(/\s+/g, '');
-  phone = "254"+phone.substr(phone.length - 9);
-  Order.find({userphone: phone},{'_id': 0,'_v': 0}).sort({"date": -1}).then(function(d){
-    res.json(d);
-  })
-
+  if(req.body.phone){
+    var phone = req.body.phone.replace(/\s+/g, '');
+    phone = "254"+phone.substr(phone.length - 9);
+    Order.find({userphone: phone},{'_id': 0,'_v': 0}).sort({"date": -1}).then(function(d){
+      res.json({code:100,data: d});
+    });
+  }else{
+    res.json({code: 101, msg: "didnt submit data"});
+  }
 });
 
 //Edit prof location
