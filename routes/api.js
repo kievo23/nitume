@@ -243,6 +243,20 @@ router.post('/myorders', function(req, res, next) {
   }
 });
 
+router.post('/deleteOrder', function(req, res, next) {
+  if(req.body.phone){
+    var phone = req.body.phone.replace(/\s+/g, '');
+    phone = "254"+phone.substr(phone.length - 9);
+    Order.findOneAndRemove({userphone: phone, _id: req.body.id}, function (err, d) {
+      if (err) return err;
+      // deleted at most one tank document
+      res.json({code:100,msg: "record deleted",data:d});
+    });
+  }else{
+    res.json({code:101,data: "no record found"});
+  }
+});
+
 //Edit prof location
 router.post('/prof/editlocation/:id',function(req, res){
   Prof.findById(req.params.id).then(function(p){
