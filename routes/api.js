@@ -235,7 +235,7 @@ router.post('/myorders', function(req, res, next) {
   if(req.body.phone){
     var phone = req.body.phone.replace(/\s+/g, '');
     phone = "254"+phone.substr(phone.length - 9);
-    Order.find({userphone: phone},{'_id': 0,'_v': 0}).sort({"date": -1}).then(function(d){
+    Order.find({userphone: phone},{'_v': 0}).sort({"date": -1}).then(function(d){
       res.json({code:100,data: d});
     });
   }else{
