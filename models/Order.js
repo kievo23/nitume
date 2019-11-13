@@ -15,7 +15,14 @@ const ordersSchema = new Schema({
     price: String,
     source: Object,
 		usernames: String,
-    userphone: String,
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Users'
+    },
+    prof: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Prof'
+    },
 		status: Number,
     date: Date
 });
