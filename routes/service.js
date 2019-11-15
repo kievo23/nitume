@@ -66,7 +66,7 @@ router.post('/create',function(req, res){
     });
   });
   
-  router.post('/prof/verifyotp',function(req, res){
+  router.post('/verifyotp',function(req, res){
     var phone = req.body.phone.replace(/\s+/g, '');
     phone = "254"+phone.substr(phone.length - 9);
     Prof.findOne({
@@ -86,7 +86,7 @@ router.post('/create',function(req, res){
     });
   });
   
-  router.post('/prof/generateotp',function(req, res){
+  router.post('/generateotp',function(req, res){
     var phone = req.body.phone.replace(/\s+/g, '');
     phone = "254"+phone.substr(phone.length - 9);
     Prof.findOne({phone: phone}).then(function(d){
@@ -125,7 +125,7 @@ router.post('/create',function(req, res){
     });
   });
 
-  router.post('/prof/myorders',async function(req, res){
+  router.post('/myorders',async function(req, res){
     var phone = req.body.phone.replace(/\s+/g, '');
     phone = "254"+phone.substr(phone.length - 9);
     let prof = await Prof.findOne({phone: phone});
@@ -133,12 +133,12 @@ router.post('/create',function(req, res){
     res.json({code:100,data: orders});
   });
 
-  router.post('/prof/availableorders',async function(req, res){
+  router.post('/availableorders',async function(req, res){
     let orders = await Order.find({prof: null}).sort({"date": -1});
     res.json({code:100,data: orders});
   });
 
-  router.post('/prof/takeOrder', async function(req, res){
+  router.post('/takeOrder', async function(req, res){
     var phone = req.body.phone.replace(/\s+/g, '');
     phone = "254"+phone.substr(phone.length - 9);
     let prof = await Prof.findOne({phone: phone});
