@@ -119,7 +119,7 @@ router.post('/user/generateotp',function(req, res){
         }
       })
     }else{
-      res.json({code:101, msg: "User not found"});
+      res.json({code:101, msg: "User not found, Kindly Register, its free!"});
     }
   });
 });

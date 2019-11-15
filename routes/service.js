@@ -35,7 +35,7 @@ var cpUpload = upload.fields([
 ]);
 
 
-router.post('/prof/create',function(req, res){
+router.post('/create',function(req, res){
     var code = Math.floor((Math.random() * 9000) + 1000);
     var phone = req.body.phone.replace(/\s+/g, '');
     phone = "254"+phone.substr(phone.length - 9);
