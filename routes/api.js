@@ -146,7 +146,7 @@ router.post('/addreview',function(req, res){
 
 router.post('/order/create', async function(req, res){
   //console.log(req.body);
-  phone = "254"+phone.substr(phone.length - 9);
+  let phone = "254"+phone.substr(phone.length - 9);
   let user = await User.findOne({phone: phone});
   if(user){
     let order = Order.create({
@@ -183,6 +183,9 @@ router.post('/order/create', async function(req, res){
         "destination" : req.body.destination
       });
       res.json({code:100, msg: "Order Uploaded successfully"});
+    }else{
+      res.json({code:101, msg: "There was a problem uploading the order"});
+    }
   }else{
     res.json({code: 101, err: "error, User not found"});
   }
