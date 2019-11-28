@@ -146,44 +146,45 @@ router.post('/addreview',function(req, res){
 
 router.post('/order/create', async function(req, res){
   //console.log(req.body);
-  phone = "+254"+phone.substr(phone.length - 9);
+  phone = "254"+phone.substr(phone.length - 9);
   let user = await User.findOne({phone: phone});
-  let order = Order.create({
-    category: req.body.category,
-		destination: req.body.destination,
-    distance: req.body.distance,
-    duration: req.body.duration,
-    items: req.body.items,
-    price: req.body.price,
-    source: req.body.source,
-		usernames: req.body.usernames,
-    user: user.id,
-    status: 0,
-    date: new Date()
-  });
-  if(order){
-    var pusher = new Pusher({
-      appId: '756519',
-      key: 'e4add9536654e5c1ee4a',
-      secret: '7bdb9b873881fb753fcb',
-      cluster: 'eu',
-      encrypted: true
+  if(user){
+    let order = Order.create({
+      category: req.body.category,
+      destination: req.body.destination,
+      distance: req.body.distance,
+      duration: req.body.duration,
+      items: req.body.items,
+      price: req.body.price,
+      source: req.body.source,
+      usernames: req.body.usernames,
+      user: user.id,
+      status: 0,
+      date: new Date()
     });
-
-    pusher.trigger('nitume', 'new-order', {
-      "message": "new Order Received",
-      "phone" : req.body.userphone,
-      "distance" : req.body.distance,
-      "duration" : req.body.duration,
-      "category" : req.body.category,
-      "price" : req.body.price,
-      "items" : req.body.items,
-      "source" : req.body.source,
-      "destination" : req.body.destination
-    });
-    res.json({code:100, msg: "Order Uploaded successfully"});
+    if(order){
+      var pusher = new Pusher({
+        appId: '756519',
+        key: 'e4add9536654e5c1ee4a',
+        secret: '7bdb9b873881fb753fcb',
+        cluster: 'eu',
+        encrypted: true
+      });
+  
+      pusher.trigger('nitume', 'new-order', {
+        "message": "new Order Received",
+        "phone" : req.body.userphone,
+        "distance" : req.body.distance,
+        "duration" : req.body.duration,
+        "category" : req.body.category,
+        "price" : req.body.price,
+        "items" : req.body.items,
+        "source" : req.body.source,
+        "destination" : req.body.destination
+      });
+      res.json({code:100, msg: "Order Uploaded successfully"});
   }else{
-    res.json({code: 101, err: "error"});
+    res.json({code: 101, err: "error, User not found"});
   }
   
 });
