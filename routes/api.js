@@ -67,7 +67,7 @@ router.post('/user/create',function(req, res){
 
 router.post('/user/verifyotp',function(req, res){
   var phone = req.body.phone.replace(/\s+/g, '');
-  phone = "+254"+phone.substr(phone.length - 9);
+  phone = "254"+phone.substr(phone.length - 9);
   User.findOne({
     phone: phone,
     otp: req.body.otp
@@ -87,7 +87,7 @@ router.post('/user/verifyotp',function(req, res){
 
 router.post('/user/generateotp',function(req, res){
   var phone = req.body.phone.replace(/\s+/g, '');
-  phone = "+254"+phone.substr(phone.length - 9);
+  phone = "254"+phone.substr(phone.length - 9);
   User.findOne({phone: phone}).then(function(d){
     if(d){
       var code = Math.floor((Math.random() * 9000) + 1000);
