@@ -238,29 +238,27 @@ router.post('/prof/create',cpUpload,function(req, res){
     });
 });
 
-router.post('/myorders', function(req, res, next) {
+router.post('/myorders', async function(req, res, next) {
   if(req.body.phone){
     var phone = req.body.phone.replace(/\s+/g, '');
     phone = "254"+phone.substr(phone.length - 9);
-    Order.find({userphone: phone},{'_v': 0}).sort({"date": -1}).then(function(d){
-      res.json({code:100,data: d});
-    });
+    let user = await User.findOne({phone: phone});
+    let orders = await Order.find({user: user.id},{'_v': 0}).sort({"date": -1});
+    res.json({code:100,data: orders});
   }else{
     res.json({code: 101, msg: "didnt submit data"});
   }
 });
 
-router.post('/deleteOrder', function(req, res, next) {
+router.post('/deleteOrder', async function(req, res, next) {
   if(req.body.phone){
     var phone = req.body.phone.replace(/\s+/g, '');
     phone = "254"+phone.substr(phone.length - 9);
-    Order.findOneAndRemove({userphone: phone, _id: req.body.id}, function (err, d) {
-      if (err) return err;
-      // deleted at most one tank document
-      res.json({code:100,msg: "record deleted",data:d});
-    });
+    let user = await User.findOne({phone: phone});
+    let order = await Order.findOneAndRemove({user: user.id, _id: req.body.id});
+    res.json({code : 100,msg: "record deleted",data : order});
   }else{
-    res.json({code:101,data: "no record found"});
+    res.json({code : 101,data: "no record found"});
   }
 });
 
