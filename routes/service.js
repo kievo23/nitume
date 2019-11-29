@@ -134,7 +134,7 @@ router.post('/create',function(req, res){
   });
 
   router.post('/availableorders',async function(req, res){
-    let orders = await Order.find({prof: null}).sort({"date": -1});
+    let orders = await Order.find({status: 0}).sort({"date": -1});
     res.json({code:100,data: orders});
   });
 
