@@ -180,8 +180,12 @@ router.post('/takeOrder', async function(req, res){
   let prof = await Prof.findOne({phone: phone});
   let order = await Order.findById(req.body.orderId);
   order.prof = prof.id
-  let rst = await order.save()
-  res.json({code:100, msg: "Order taken"});
+  let rst = await order.save();
+  if(rst){
+    res.json({code:100, msg: "Order taken"});
+  }else{
+    res.json({code:101, msg: "Some problem happened"});
+  }  
 })
 
 module.exports = router;
