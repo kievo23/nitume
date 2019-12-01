@@ -180,6 +180,7 @@ router.post('/takeOrder', async function(req, res){
   let prof = await Prof.findOne({phone: phone});
   let order = await Order.findById(req.body.orderId);
   order.prof = prof.id
+  order.status = 1;
   let rst = await order.save();
   if(rst){
     res.json({code:100, msg: "Order taken"});
