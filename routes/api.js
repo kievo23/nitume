@@ -164,10 +164,10 @@ router.post('/order/create', async function(req, res){
     });
     if(order){
       var pusher = new Pusher({
-        appId: '756519',
-        key: 'e4add9536654e5c1ee4a',
-        secret: '7bdb9b873881fb753fcb',
-        cluster: 'eu',
+        appId: config.PUSHER.appId,
+        key: config.PUSHER.key,
+        secret: config.PUSHER.secret,
+        cluster: config.PUSHER.cluster,
         encrypted: true
       });
   
@@ -194,7 +194,7 @@ router.post('/order/create', async function(req, res){
 
 
 
-router.post('/prof/call_log/:id',function(req, res){
+router.post('/call_log/:id',function(req, res){
   Prof.findById(req.params.id).then(function(p){
     p.call_log.push(req.body);
     p.save(function(err){
@@ -209,34 +209,6 @@ router.post('/prof/call_log/:id',function(req, res){
   });
 });
 
-router.post('/prof/create',cpUpload,function(req, res){
-  var code = Math.floor((Math.random() * 9999) + 1000);
-  var phone = req.body.phone.replace(/\s+/g, '');
-  phone = "254"+phone.substr(phone.length - 9);
-
-    Prof.create({
-      nickname: req.body.nickname,
-      names : req.body.names,
-      email: req.body.email,
-      phone: phone,
-      dob: req.body.dob,
-      email: req.body.email,
-      pin: req.body.pin,
-      occupation: req.body.occupation,
-      idno: req.body.idno,
-      locationname: req.body.locationname,
-      jobtype: req.body.jobtype,
-      location: {type: "Point", coordinates: [ req.body.longitude, req.body.latitude ] },
-      otp: code
-    },function(err, user){
-      if(err){
-        console.log(err);
-        res.json({code: 101, err: err});
-      }else{
-        res.json({code: 100, user: user});
-      }
-    });
-});
 
 router.post('/myorders', async function(req, res, next) {
   if(req.body.phone){
@@ -262,66 +234,6 @@ router.post('/deleteOrder', async function(req, res, next) {
   }
 });
 
-router.post('/prof/verifyotp',function(req, res){
-  var phone = req.body.phone.replace(/\s+/g, '');
-  phone = "254"+phone.substr(phone.length - 9);
-  Prof.find({
-    phone: phone,
-    otp: req.body.otp
-  },function(err, user){
-    if(err){
-      console.log(err);
-      res.json({code: 101, err: err});
-    }else{
-      if(user){
-        res.json({code: 100, data: user});
-      }else{
-        res.json({code: 101, msg: "User not found"});
-      }
-    }
-  });
-});
-
-router.post('/prof/login',function(req, res){
-  var phone = req.body.phone.replace(/\s+/g, '');
-  phone = "254"+phone.substr(phone.length - 9);
-  Prof.find({
-    phone: phone,
-    pin: req.body.pin
-  },function(err, user){
-    if(err){
-      console.log(err);
-      res.json({code: 101, err: err});
-    }else{
-      if(user){
-        Category.populate( user, { path: "jobtype" }, function(err, usr) {
-          if (err) throw err;
-          User.populate( usr, { path: "reviews.userid" }, function(err, u) {
-            if (err) {
-              User.populate( usr, { path: "call_log.callerid" }, function(err, us) {
-                if (err) {
-                  res.json({code: 100, data: usr});
-                }else{
-                  res.json({code: 100, data: us});
-                }
-              });
-            }else{
-              User.populate( u, { path: "call_log.callerid" }, function(err, us) {
-                if (err) {
-                  res.json({code: 100, data: u});
-                }else{
-                  res.json({code: 100, data: us});
-                }
-              });
-            }
-          });
-        });
-      }else{
-        res.json({code: 101, msg: "User not found"});
-      }
-    }
-  });
-});
 
 //SOCIALS
 router.post('/user/verifyfb',function(req, res){

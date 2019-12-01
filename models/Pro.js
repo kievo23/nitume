@@ -25,6 +25,7 @@ const profSchema = new Schema({
 		call_log: Array,
 		otp: String,
 		availability: Boolean,
+		confirmed: Boolean,
 		approved: Boolean
 });
 
