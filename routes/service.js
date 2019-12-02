@@ -165,7 +165,7 @@ router.post('/myorders',async function(req, res){
   var phone = req.body.phone.replace(/\s+/g, '');
   phone = "254"+phone.substr(phone.length - 9);
   let prof = await Prof.findOne({phone: phone});
-  let orders = await Order.find({prof: prof.id},{'_v': 0}).sort({"date": -1});
+  let orders = await Order.find({prof: prof.id},{'_v': 0}).populate('user').sort({"date": -1});
   res.json({code:100,data: orders});
 });
 
@@ -178,15 +178,19 @@ router.post('/takeOrder', async function(req, res){
   var phone = req.body.phone.replace(/\s+/g, '');
   phone = "254"+phone.substr(phone.length - 9);
   let prof = await Prof.findOne({phone: phone});
-  let order = await Order.findById(req.body.orderId);
-  order.prof = prof.id
-  order.status = 1;
-  let rst = await order.save();
-  if(rst){
-    res.json({code:100, msg: "Order taken"});
+  if(prof.approved == true){
+    let order = await Order.findById(req.body.orderId);
+    order.prof = prof.id
+    order.status = 1;
+    let rst = await order.save();
+    if(rst){
+      res.json({code:100, msg: "Order taken"});
+    }else{
+      res.json({code:101, msg: "Some problem happened"});
+    } 
   }else{
-    res.json({code:101, msg: "Some problem happened"});
-  }  
+    res.json({code:101, msg: "Your Account is not yet approved"});
+  } 
 })
 
 module.exports = router;
