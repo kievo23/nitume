@@ -165,7 +165,7 @@ router.post('/myorders',async function(req, res){
   var phone = req.body.phone.replace(/\s+/g, '');
   phone = "254"+phone.substr(phone.length - 9);
   let prof = await Prof.findOne({phone: phone});
-  let orders = await Order.find({prof: prof.id},{'_v': 0}).populate('user').sort({"date": -1});
+  let orders = await Order.find({prof: prof.id},{'_v': 0}).populate('user').populate('prof').sort({"date": -1});
   res.json({code:100,data: orders});
 });
 
