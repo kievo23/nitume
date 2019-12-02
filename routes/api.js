@@ -158,6 +158,7 @@ router.post('/order/create', async function(req, res){
       price: req.body.price,
       source: req.body.source,
       usernames: req.body.usernames,
+      mode: req.body.mode,
       user: user.id,
       status: 0,
       date: new Date()
