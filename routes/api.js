@@ -260,7 +260,7 @@ router.post('/orderCompleted', async function(req, res, next) {
     phone = "254"+phone.substr(phone.length - 9);
     let user = await User.findOne({phone: phone});
     if(user){
-      let order = await Order.findOneAndRemove({user: user.id, _id: req.body.orderId});
+      let order = await Order.findOne({user: user.id, _id: req.body.orderId});
       if(order){
         order.status = parseInt(req.body.status);
         let rst = await order.save();
