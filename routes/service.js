@@ -189,7 +189,7 @@ router.post('/takeOrder', async function(req, res){
       res.json({code:101, msg: "Some problem happened"});
     } 
   }else{
-    res.json({code:101, msg: "Your Account is not yet approved"});
+    res.json({code:101, msg: "You can not take an errand automatically because your Account is not yet approved. However, we have received your intent and will get back"});
   } 
 })
 
