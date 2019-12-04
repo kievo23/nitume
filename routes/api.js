@@ -273,9 +273,9 @@ router.post('/updateToken', async function(req, res, next) {
       res.json({code : 500, msg: "error happened"});
     }
   }else if(req.body.type == "serviceman"){
-    let user = await User.findOne({phone: phone});
-    user.firebaseToken = req.body.token;
-    let rst = await user.save();
+    let prof = await Prof.findOne({phone: phone});
+    prof.firebaseToken = req.body.token;
+    let rst = await prof.save();
     if(rst){
       res.json({code : 200, msg: "Token updated"});
     }else{

@@ -16,6 +16,8 @@ var Order = require(__dirname + '/../models/Order');
 
 var config = require(__dirname + '/../config.json');
 
+var settings = require(__dirname + '/../config/System');
+
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './public/uploads/')
@@ -179,31 +181,33 @@ router.post('/takeOrder', async function(req, res){
   phone = "254"+phone.substr(phone.length - 9);
   let prof = await Prof.findOne({phone: phone});
   if(prof.approved == true){
-    let order = await Order.findById(req.body.orderId);
+    let order = await Order.findById(req.body.orderId).populate('user');
     order.prof = prof.id
     order.status = 1;
     let rst = await order.save();
+    let source = JSON.parse(order.source);
+    let destination = JSON.parse(order.destination);
     if(rst){
       let topic = 'orderIsBeingProcessed';
 
-          let message = {
-            notification: {
-              title: 'Your Order is assigned',
-              body: "Mode: "+order.mode+', From: '+ order.source+ " to: " +order.destination
-            },
-            topic: topic
-            //token: registrationToken
-          };
+      let message = {
+        notification: {
+          title: 'Your Order is assigned',
+          body: "Mode: "+order.mode+', From: '+ source.placename+ " to: " +destination.placename
+        },
+        topic : topic,
+        token : order.user.firebaseToken
+      };
 
-          // Send a message to devices subscribed to the provided topic.
-          admin.messaging().send(message)
-            .then((response) => {
-              // Response is a message ID string.
-              console.log('Successfully sent message:', response);
-            })
-            .catch((error) => {
-              console.log('Error sending message:', error);
-            });
+      // Send a message to devices subscribed to the provided topic.
+      settings.firebase.messaging().send(message)
+        .then((response) => {
+          // Response is a message ID string.
+          console.log('Successfully sent message:', response);
+        })
+        .catch((error) => {
+          console.log('Error sending message:', error);
+        });
       res.json({code:100, msg: "You have been assigned this errand."});
     }else{
       res.json({code:101, msg: "Some problem happened"});
