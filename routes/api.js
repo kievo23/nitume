@@ -40,7 +40,7 @@ var cpUpload = upload.fields([
 router.post('/user/create',function(req, res){
   var code = Math.floor((Math.random() * 9000) + 1000);
   var phone = req.body.phone.replace(/\s+/g, '');
-  phone = "+254"+phone.substr(phone.length - 9);
+  phone = "254"+phone.substr(phone.length - 9);
   User.create({
     names : req.body.names,
     email: req.body.email,
