@@ -15,6 +15,11 @@ var Group = require(__dirname + '/../models/Group');
 var Order = require(__dirname + '/../models/Order');
 
 var config = require(__dirname + '/../config.json');
+let admin = require('firebase-admin');
+admin.initializeApp({
+  credential: admin.credential.cert(config.firebaseAccountKey),
+  databaseURL: "https://nitume-4cfe0.firebaseio.com"
+});
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -164,25 +169,27 @@ router.post('/order/create', async function(req, res){
       date: new Date()
     });
     if(order){
-      var pusher = new Pusher({
-        appId: config.PUSHER.appId,
-        key: config.PUSHER.key,
-        secret: config.PUSHER.secret,
-        cluster: config.PUSHER.cluster,
-        encrypted: true
-      });
-  
-      pusher.trigger('nitume', 'new-order', {
-        "message": "new Order Received",
-        "phone" : req.body.userphone,
-        "distance" : req.body.distance,
-        "duration" : req.body.duration,
-        "category" : req.body.category,
-        "price" : req.body.price,
-        "items" : req.body.items,
-        "source" : req.body.source,
-        "destination" : req.body.destination
-      });
+      
+      let topic = 'newOrder';
+
+      let message = {
+        notification: {
+          title: 'New order has been received',
+          body: "Mode: "+req.body.mode+', From: '+ order.source+ " to: " +order.destination
+        },
+        topic: topic
+      };
+
+      // Send a message to devices subscribed to the provided topic.
+      admin.messaging().send(message)
+        .then((response) => {
+          // Response is a message ID string.
+          console.log('Successfully sent message:', response);
+        })
+        .catch((error) => {
+          console.log('Error sending message:', error);
+        });
+
       res.json({code:100, msg: "Order Uploaded successfully"});
     }else{
       res.json({code:101, msg: "There was a problem uploading the order"});

@@ -1,3 +1,4 @@
 /public/uploads/
 /config.json
 /node_modules
+/firebaseCloudMessagingKey.json
