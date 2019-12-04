@@ -3,11 +3,6 @@ var router = express.Router();
 
 var Order = require(__dirname + '/../models/Order');
 var config = require(__dirname + '/../config.json');
-let admin = require('firebase-admin');
-admin.initializeApp({
-  credential: admin.credential.cert(config.firebaseAccountKey),
-  databaseURL: "https://nitume-4cfe0.firebaseio.com"
-});
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
