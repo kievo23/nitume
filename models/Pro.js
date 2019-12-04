@@ -26,7 +26,8 @@ const profSchema = new Schema({
 		otp: String,
 		availability: Boolean,
 		confirmed: Boolean,
-		approved: Boolean
+		approved: Boolean,
+		firebaseToken: String
 });
 
 module.exports = mongoose.model('Prof', profSchema);

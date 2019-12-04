@@ -261,17 +261,65 @@ router.post('/user/verifyfb',function(req, res){
   });
 });
 
+
+router.post('/updateToken', async function(req, res, next) {
+  let phone = req.body.phone.replace(/\s+/g, '');
+  phone = "254"+phone.substr(phone.length - 9);
+  if(req.body.type == "user"){
+    let user = await User.findOne({phone: phone});
+    user.firebaseToken = req.body.token;
+    let rst = await user.save();
+    if(rst){
+      res.json({code : 200, msg: "Token updated"});
+    }else{
+      res.json({code : 500, msg: "error happened"});
+    }
+  }else if(req.body.type == "serviceman"){
+    let user = await User.findOne({phone: phone});
+    user.firebaseToken = req.body.token;
+    let rst = await user.save();
+    if(rst){
+      res.json({code : 200, msg: "Token updated"});
+    }else{
+      res.json({code : 500, msg: "error happened"});
+    }
+  }
+});
+
+
 router.post('/orderCompleted', async function(req, res, next) {
   if(req.body.phone){
     var phone = req.body.phone.replace(/\s+/g, '');
     phone = "254"+phone.substr(phone.length - 9);
     let user = await User.findOne({phone: phone});
     if(user){
-      let order = await Order.findOne({user: user.id, _id: req.body.orderId});
+      let order = await Order.findOne({user: user.id, _id: req.body.orderId}).populate('user');
       if(order){
         order.status = parseInt(req.body.status);
         let rst = await order.save();
         if(rst){
+          let registrationToken = order.user.firebaseToken;
+          let topic = 'orderConfirmed';
+
+          let message = {
+            notification: {
+              title: 'Your Order is assigned',
+              body: "Mode: "+order.mode+', From: '+ order.source+ " to: " +order.destination
+            },
+            topic: topic,
+            token: registrationToken
+          };
+
+          // Send a message to devices subscribed to the provided topic.
+          admin.messaging().send(message)
+            .then((response) => {
+              // Response is a message ID string.
+              console.log('Successfully sent message:', response);
+            })
+            .catch((error) => {
+              console.log('Error sending message:', error);
+            });
+
           res.json({code : 100, data: "The order status has been changed successfully"});
         }else{
           res.json({code : 101, data: "Oops! Order status wasnt changed. Try again later"});
