@@ -199,15 +199,13 @@ router.post('/takeOrder', async function(req, res){
     order.prof = prof.id
     order.status = 1;
     let rst = await order.save();
-    let source = JSON.parse(order.source);
-    let destination = JSON.parse(order.destination);
     if(rst){
       let topic = 'orderIsBeingProcessed';
 
       let message = {
         notification: {
           title: 'Your Order is assigned',
-          body: "Mode: "+order.mode+', From: '+ source.placename+ " to: " +destination.placename
+          body: "Mode: "+order.mode+', From: '+ order.source.placename+ " to: " +order.destination.placename
         },
         //topic : topic,
         token : order.user.firebaseToken

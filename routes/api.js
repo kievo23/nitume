@@ -170,12 +170,10 @@ router.post('/order/create', async function(req, res){
     if(order){
       
       let topic = 'newOrder';
-      let source = JSON.parse(order.source);
-      let destination = JSON.parse(order.destination);
       let message = {
         notification: {
           title: 'New order has been received',
-          body: "Mode: "+req.body.mode+', From: '+ source.placename+ " to: " +destination.placename
+          body: "Mode: "+req.body.mode+', From: '+ order.source.placename+ " to: " +order.destination.placename
         },
         topic: topic
       };
@@ -304,7 +302,7 @@ router.post('/orderCompleted', async function(req, res, next) {
           let message = {
             notification: {
               title: 'Your Order is assigned',
-              body: "Mode: "+order.mode+', From: '+ order.source+ " to: " +order.destination
+              body: "Mode: "+order.mode+', From: '+ order.source.placename+ " to: " +order.destination.placename
             },
             token: registrationToken
           };
