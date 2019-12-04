@@ -153,7 +153,7 @@ router.post('/order/create', async function(req, res){
   let phone = "254"+req.body.userphone.substr(req.body.userphone.length - 9);
   let user = await User.findOne({phone: phone});
   if(user){
-    let order = Order.create({
+    let order = await Order.create({
       category: req.body.category,
       destination: req.body.destination,
       distance: req.body.distance,
@@ -167,6 +167,7 @@ router.post('/order/create', async function(req, res){
       status: 0,
       date: new Date()
     });
+    
     if(order){
       console.log(order);
       let source = JSON.parse(order.source);
