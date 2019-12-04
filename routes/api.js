@@ -168,6 +168,7 @@ router.post('/order/create', async function(req, res){
       date: new Date()
     });
     if(order){
+      console.log(order);
       let source = JSON.parse(order.source);
       let destination = JSON.parse(order.destination);
       
