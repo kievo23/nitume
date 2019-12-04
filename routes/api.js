@@ -167,17 +167,17 @@ router.post('/order/create', async function(req, res){
       status: 0,
       date: new Date()
     });
-    
+
     if(order){
       console.log(order);
-      let source = JSON.parse(order.source);
-      let destination = JSON.parse(order.destination);
+      //let source = JSON.parse(order.source);
+      //let destination = JSON.parse(order.destination);
       
       let topic = 'newOrder';
       let message = {
         notification: {
           title: 'New order has been received',
-          body: "Mode: "+req.body.mode+', From: '+ source.placename+ " to: " +destination.placename
+          body: "Mode: "+req.body.mode+', From: '+ order.source.placename+ " to: " +order.destination.placename
         },
         topic: topic
       };
