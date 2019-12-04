@@ -14,12 +14,10 @@ var Category = require(__dirname + '/../models/Category');
 var Group = require(__dirname + '/../models/Group');
 var Order = require(__dirname + '/../models/Order');
 
+var settings = require(__dirname + '/../config/System');
+
 var config = require(__dirname + '/../config.json');
-let admin = require('firebase-admin');
-admin.initializeApp({
-  credential: admin.credential.cert(config.firebaseAccountKey),
-  databaseURL: "https://nitume-4cfe0.firebaseio.com"
-});
+
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -181,7 +179,7 @@ router.post('/order/create', async function(req, res){
       };
 
       // Send a message to devices subscribed to the provided topic.
-      admin.messaging().send(message)
+      settings.firebase.messaging().send(message)
         .then((response) => {
           // Response is a message ID string.
           console.log('Successfully sent message:', response);
@@ -311,7 +309,7 @@ router.post('/orderCompleted', async function(req, res, next) {
           };
 
           // Send a message to devices subscribed to the provided topic.
-          admin.messaging().send(message)
+          settings.firebase.messaging().send(message)
             .then((response) => {
               // Response is a message ID string.
               console.log('Successfully sent message:', response);
