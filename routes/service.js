@@ -117,6 +117,19 @@ router.post('/create',cpUpload,function(req, res){
         console.log(err);
         res.json({code: 101, err: err});
       }else{
+        var options = { method: 'GET',
+          url: 'http://infopi.io/text/index.php',
+          qs:
+          { app: 'ws',
+            u: 'Kev',
+            h: config.sms_key,
+            op: 'pv',
+            to: user.phone,
+            msg: 'OTP code is: '+ code } };
+        request(options, function (error, response, body) {
+          if (error) throw new Error(error);
+          //console.log(body);
+        });
         res.json({code: 100, user: user});
       }
     });
