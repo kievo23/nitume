@@ -170,11 +170,12 @@ router.post('/order/create', async function(req, res){
     if(order){
       
       let topic = 'newOrder';
-
+      let source = JSON.parse(order.source);
+      let destination = JSON.parse(order.destination);
       let message = {
         notification: {
           title: 'New order has been received',
-          body: "Mode: "+req.body.mode+', From: '+ order.source+ " to: " +order.destination
+          body: "Mode: "+req.body.mode+', From: '+ source.placename+ " to: " +destination.placename
         },
         topic: topic
       };
@@ -292,20 +293,19 @@ router.post('/orderCompleted', async function(req, res, next) {
     phone = "254"+phone.substr(phone.length - 9);
     let user = await User.findOne({phone: phone});
     if(user){
-      let order = await Order.findOne({user: user.id, _id: req.body.orderId}).populate('user');
+      let order = await Order.findOne({user: user.id, _id: req.body.orderId}).populate('prof');
       if(order){
         order.status = parseInt(req.body.status);
         let rst = await order.save();
         if(rst){
-          let registrationToken = order.user.firebaseToken;
-          let topic = 'orderConfirmed';
+          let registrationToken = order.prof.firebaseToken;
+          //let topic = 'orderConfirmed';
 
           let message = {
             notification: {
               title: 'Your Order is assigned',
               body: "Mode: "+order.mode+', From: '+ order.source+ " to: " +order.destination
             },
-            topic: topic,
             token: registrationToken
           };
 
