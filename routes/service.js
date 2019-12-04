@@ -110,7 +110,8 @@ router.post('/create',cpUpload,function(req, res){
       locationname: req.body.locationname,
       jobtype: req.body.jobtype,
       location: {type: "Point", coordinates: [ req.body.longitude, req.body.latitude ] },
-      otp: code
+      otp: code,
+      date: new Date()
     },function(err, user){
       if(err){
         console.log(err);

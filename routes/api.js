@@ -45,7 +45,8 @@ router.post('/user/create',function(req, res){
     names : req.body.names,
     email: req.body.email,
     phone: phone,
-    otp: code
+    otp: code,
+    date: new Date()
   },function(err, user){
     if(err){
       res.json({code: 101, err: err});

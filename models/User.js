@@ -13,7 +13,8 @@ const userSchema = new Schema({
 		role: String,
 		email: String,
 		otp: String,
-		firebaseToken: String
+		firebaseToken: String,
+		date: Date
 });
 
 module.exports = mongoose.model('Users', userSchema);

@@ -27,7 +27,8 @@ const profSchema = new Schema({
 		availability: Boolean,
 		confirmed: Boolean,
 		approved: Boolean,
-		firebaseToken: String
+		firebaseToken: String,
+		date: Date
 });
 
 module.exports = mongoose.model('Prof', profSchema);
