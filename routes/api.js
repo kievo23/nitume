@@ -305,8 +305,8 @@ router.post('/orderCompleted', async function(req, res, next) {
 
           let message = {
             notification: {
-              title: 'Your Order is assigned',
-              body: "Mode: "+order.mode+', From: '+ order.source.placename+ " to: " +order.destination.placename
+              title: user.names+' confirmed receipt',
+              body: "The customer has confirmed that they have received their order"
             },
             token: registrationToken
           };
