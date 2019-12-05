@@ -207,7 +207,6 @@ router.post('/takeOrder', async function(req, res){
           title: 'Your Order is assigned',
           body: "Mode: "+order.mode+', From: '+ order.source.placename+ " to: " +order.destination.placename
         },
-        //topic : topic,
         token : order.user.firebaseToken
       };
 
