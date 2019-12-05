@@ -204,13 +204,13 @@ router.post('/takeOrder', async function(req, res){
 
       let message = {
         notification: {
-          title: 'Your Order is assigned',
+          title: 'Your Order is assigned to '+prof.names,
           body: "Mode: "+order.mode+', From: '+ order.source.placename+ " to: " +order.destination.placename
         },
         token : order.user.firebaseToken
       };
 
-      console.log("token"+order.user.firebaseToken);
+      //console.log("token"+order.user.firebaseToken);
 
       // Send a message to devices subscribed to the provided topic.
       settings.firebase.messaging().send(message)
