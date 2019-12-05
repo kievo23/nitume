@@ -210,6 +210,8 @@ router.post('/takeOrder', async function(req, res){
         token : order.user.firebaseToken
       };
 
+      console.log("token"+order.user.firebaseToken);
+
       // Send a message to devices subscribed to the provided topic.
       settings.firebase.messaging().send(message)
         .then((response) => {
