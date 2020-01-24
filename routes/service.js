@@ -207,11 +207,19 @@ router.post('/orderStatusUpdate', async function(req, res){
     order.status = parseInt(req.body.code);
     let rst = await order.save();
     if(rst){
-      let topic = 'orderIsBeingProcessed';
+      let titleHead = '';
+
+      if(parseInt(req.body.code) == 1){
+        titleHead = 'Your Order is assigned to '+prof.names;
+      }else if(parseInt(req.body.code) == 2){
+        titleHead = 'Your Order has been picked by '+prof.names;
+      }else if(parseInt(req.body.code) == 3){
+        titleHead = prof.names + 'Has arrived with your order ';
+      }
 
       let message = {
         notification: {
-          title: 'Your Order is assigned to '+prof.names,
+          title: titleHead,
           body: "Mode: "+order.mode+', From: '+ order.source.placename+ " to: " +order.destination.placename
         },
         token : order.user.firebaseToken
