@@ -28,6 +28,7 @@ const profSchema = new Schema({
 		confirmed: Boolean,
 		approved: Boolean,
 		firebaseToken: String,
+		commision: Number,
 		date: Date
 });
 

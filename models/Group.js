@@ -8,7 +8,7 @@ const Schema = mongoose.Schema;
 
 const groupSchema = new Schema({
 		name: String,
-    slug: String,
+    	slug: String,
 		children: Array,
 		photo: String
 });

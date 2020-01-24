@@ -300,12 +300,17 @@ router.post('/orderCompleted', async function(req, res, next) {
         order.status = parseInt(req.body.status);
         let rst = await order.save();
         if(rst){
+          let prof = await Prof.findById(order.prof);
+          let commission = 0.1 * parseFloat(order.price);
+          prof.commission -= commission;
+          await prof.save();
+
           let registrationToken = order.prof.firebaseToken;
           //let topic = 'orderConfirmed';
 
           let message = {
             notification: {
-              title: user.names+' confirmed receipt',
+              title: user.names+' confirmed the order',
               body: "The customer has confirmed that they have received their order"
             },
             token: registrationToken

@@ -25,7 +25,8 @@ const ordersSchema = new Schema({
         ref: 'Prof'
     },
 		status: Number,
-    date: Date
+    date: Date,
+    special: Boolean
 });
 
 module.exports = mongoose.model('Orders', ordersSchema);

@@ -190,14 +190,21 @@ router.post('/availableorders',async function(req, res){
   res.json({code:100,data: orders});
 });
 
-router.post('/takeOrder', async function(req, res){
+router.post('/orderStatusUpdate', async function(req, res){
   var phone = req.body.phone.replace(/\s+/g, '');
   phone = "254"+phone.substr(phone.length - 9);
   let prof = await Prof.findOne({phone: phone});
+
   if(prof.approved == true){
+    // if(prof.hasOwnProperty('commission')){
+    //   if(parseFloat(prof.commission) > 70){
+    //     res.json({code:101, msg: "Kindly pay the commission of "+prof.commission+ " to till number xxxxxx to free up your account and take new orders"});
+    //     exit();
+    //   }
+    // }
     let order = await Order.findById(req.body.orderId).populate('user');
     order.prof = prof.id
-    order.status = 1;
+    order.status = parseInt(req.body.code);
     let rst = await order.save();
     if(rst){
       let topic = 'orderIsBeingProcessed';
