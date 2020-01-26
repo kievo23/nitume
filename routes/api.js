@@ -225,7 +225,7 @@ router.post('/myorders', async function(req, res, next) {
     var phone = req.body.phone.replace(/\s+/g, '');
     phone = "254"+phone.substr(phone.length - 9);
     let user = await User.findOne({phone: phone});
-    let orders = await Order.find({user: user.id},{'_v': 0}).sort({"date": -1});
+    let orders = await Order.find({user: user.id},{'_v': 0}).populate('prof').sort({"date": -1});
     res.json({code:100,data: orders});
   }else{
     res.json({code: 101, msg: "didnt submit data"});
