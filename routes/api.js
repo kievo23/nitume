@@ -46,7 +46,7 @@ router.post('/user/create',function(req, res){
     email: req.body.email,
     phone: phone,
     otp: code,
-    date: new Date()
+    date: new Date().toLocaleString("en-US", {timeZone: "Africa/Nairobi"})
   },function(err, user){
     if(err){
       res.json({code: 101, err: err});
@@ -134,7 +134,7 @@ router.post('/addreview',function(req, res){
     x.userid = req.body.userid;
     x.review = req.body.review;
     x.rate = req.body.rate;
-    x.date = new Date();
+    x.date = new Date().toLocaleString("en-US", {timeZone: "Africa/Nairobi"});
     p.reviews.push(x);
     p.save(function(err){
       if(err){
@@ -165,7 +165,7 @@ router.post('/order/create', async function(req, res){
       mode: req.body.mode,
       user: user.id,
       status: 0,
-      date: new Date()
+      date: new Date().toLocaleString("en-US", {timeZone: "Africa/Nairobi"})
     });
 
     if(order){

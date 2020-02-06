@@ -111,7 +111,7 @@ router.post('/create',cpUpload,function(req, res){
       jobtype: req.body.jobtype,
       location: {type: "Point", coordinates: [ req.body.longitude, req.body.latitude ] },
       otp: code,
-      date: new Date()
+      date: new Date().toLocaleString("en-US", {timeZone: "Africa/Nairobi"})
     },function(err, user){
       if(err){
         console.log(err);
@@ -236,7 +236,14 @@ router.post('/orderStatusUpdate', async function(req, res){
         .catch((error) => {
           console.log('Error sending message:', error);
         });
-      res.json({code:100, msg: "You have been assigned this errand."});
+      if(parseInt(req.body.code) == 1){
+        res.json({code:100, msg: "You have been assigned this errand."});
+      }else if(parseInt(req.body.code) == 2){
+        res.json({code:100, msg: "You have picked the package."});
+      }else if(parseInt(req.body.code) == 3){
+        res.json({code:100, msg: "You have arrived at destination."});
+      }
+      
     }else{
       res.json({code:101, msg: "Some problem happened"});
     } 
