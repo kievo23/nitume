@@ -193,6 +193,24 @@ router.post('/order/create', async function(req, res){
           console.log('Error sending message:', error);
         });
 
+      var options = { method: 'GET',
+          url: 'http://infopi.io/text/index.php',
+          qs:
+            { app: 'ws',
+              u: 'Kev',
+              h: config.sms_key,
+              op: 'pv',
+              to: '254710345130',
+              msg: 'New Order has been received: Attend to it urgently!!' },
+          headers:
+            { 'postman-token': '4ca47976-a3bc-69d6-0cae-e80049f926e9',
+              'cache-control': 'no-cache' } };
+
+        request(options, function (error, response, body) {
+          if (error) throw new Error(error);
+          //console.log(body);
+        });
+
       res.json({code:100, msg: "Order Uploaded successfully"});
     }else{
       res.json({code:101, msg: "There was a problem uploading the order"});
