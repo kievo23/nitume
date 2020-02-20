@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+    pre#orders
+    .orders 
+      each user in users 
+        strong
+          =user.date
+        ul
+          li
+            | Category: 
+            =user.username
+          li
+            | Charge: 
+            =user.phone
+          li
+            | Distance: 
+            =user.email        
+        hr
+  script.
