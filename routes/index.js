@@ -32,6 +32,32 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Nitume API' });
 });
 
+router.get('/notification', async function(req,res){
+  
+  let body = req.query.body;
+  let title = req.query.title;
+  let message = {
+    notification: {
+      title: title,
+      body: body
+    },
+    topic: 'notification'
+  };
+
+  //console.log("token"+order.user.firebaseToken);
+
+  // Send a message to devices subscribed to the provided topic.
+  settings.firebase.messaging().send(message)
+    .then((response) => {
+      // Response is a message ID string.
+      console.log('Successfully sent message:', response);
+    })
+    .catch((error) => {
+      console.log('Error sending message:', error);
+    });
+    res.send("notifications sent");
+});
+
 router.get('/orders', function(req, res, next) {
   Order.find({},{'_id': 0,'_v': 0}).sort({"date": -1}).then(function(d){
     res.render('orders', { title: 'Nitume Orders', orders: d });
