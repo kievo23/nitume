@@ -32,6 +32,10 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Nitume API' });
 });
 
+router.get('/time', function(req, res, next) {
+  res.json({time: Date()})
+})
+
 router.get('/notification', async function(req,res){
   
   let body = req.query.body;

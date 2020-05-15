@@ -81,7 +81,6 @@ router.post('/generateotp',function(req, res){
             res.json({code:100, msg: "OTP generated successfully"});
             //console.log(body);
           });
-
         }
       })
     }else{
