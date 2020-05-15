@@ -33,7 +33,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/time', function(req, res, next) {
-  res.json({time: Date()})
+  res.json({time: new Date()})
 })
 
 router.get('/notification', async function(req,res){
