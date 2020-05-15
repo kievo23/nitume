@@ -15,6 +15,7 @@ const ordersSchema = new Schema({
     price: String,
     source: Object,
     usernames: String,
+    proximity: Number,
     mode: String,
     user: {
       type: mongoose.Schema.Types.ObjectId,

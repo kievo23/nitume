@@ -2,16 +2,14 @@ var express = require('express');
 var router = express.Router();
 
 var request = require("request");
-var Jimp = require("jimp");
 var slug = require('slug');
 var multer  = require('multer');
 var mime = require('mime');
-var Pusher = require('pusher');
+const geolib = require('geolib');
 
 var User = require(__dirname + '/../models/User');
 var Prof = require(__dirname + '/../models/Pro');
 var Category = require(__dirname + '/../models/Category');
-var Group = require(__dirname + '/../models/Group');
 var Order = require(__dirname + '/../models/Order');
 
 var config = require(__dirname + '/../config.json');
@@ -186,8 +184,37 @@ router.post('/myorders',async function(req, res){
 });
 
 router.post('/availableorders',async function(req, res){
+  //send coordinates to calculate distance
   let orders = await Order.find({status: 0}).populate('user').sort({"date": -1});
-  res.json({code:100,data: orders});
+  //let orders = await Order.find().populate('user').sort({"date": -1});
+
+  // Experimental orders
+  //console.log("number of orders to loop: "+orders.length)
+  if(orders){
+    try {
+      orders.forEach((order ,key) => {
+        //console.log(key)
+        let distanceInMeters = geolib.getPreciseDistance(
+          { latitude: parseFloat(req.body.latitude), longitude: parseFloat(req.body.longitude) },
+          { latitude: parseFloat(order.source.latitude), longitude: parseFloat(order.source.longitude) },
+          1
+        )
+
+        order.proximity = distanceInMeters
+      });
+    } catch (e) {
+      if (e !== BreakException) throw e;
+    }
+  }
+  // End of experimental orders
+  let ordersAvailable = []
+  orders.forEach((order, key) => {
+    if(Number(order.proximity) > 20000){      
+    }else{
+      ordersAvailable.push(order)
+    }
+  })
+  res.json({code:100, orderCount: ordersAvailable.length, data: ordersAvailable});
 });
 
 router.post('/orderStatusUpdate', async function(req, res){
