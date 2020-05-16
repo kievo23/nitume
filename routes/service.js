@@ -186,7 +186,7 @@ router.post('/availableorders',async function(req, res){
   //send coordinates to calculate distance
   let orders = await Order.find({status: 0}).populate('user').sort({"date": -1});
   //let orders = await Order.find().populate('user').sort({"date": -1});
-
+  console.log(req.body)
   // Experimental orders
   //console.log("number of orders to loop: "+orders.length)
   if(orders){
