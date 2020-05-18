@@ -168,6 +168,8 @@ router.post('/order/create', async function(req, res){
       date: new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })
     });
 
+    console.log("DATE CREATE: "+new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }))
+
     if(order){
       console.log(order);
       //let source = JSON.parse(order.source);
