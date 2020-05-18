@@ -165,7 +165,7 @@ router.post('/order/create', async function(req, res){
       mode: req.body.mode,
       user: user.id,
       status: 0,
-      date: new Date()
+      date: new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })
     });
 
     if(order){
