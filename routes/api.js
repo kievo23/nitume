@@ -165,7 +165,7 @@ router.post('/order/create', async function(req, res){
       mode: req.body.mode,
       user: user.id,
       status: 0,
-      date: Date()
+      date: new Date()
     });
 
     if(order){
