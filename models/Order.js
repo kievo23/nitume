@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const timeZone = require('mongoose-timezone');
 
 var sys = require(__dirname + '/../config/System');
 var db = mongoose.connect(sys.db_uri, {useMongoClient: true });
@@ -27,7 +28,13 @@ const ordersSchema = new Schema({
     },
 		status: Number,
     date: Date,
+    subDocument: {
+      subDate: {
+        type: Date,
+      },
+    },
     special: Boolean
 });
 
+ordersSchema.plugin(timeZone, { paths: ['date', 'subDocument.subDate'] });
 module.exports = mongoose.model('Orders', ordersSchema);
