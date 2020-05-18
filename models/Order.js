@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const timeZone = require('mongoose-timezone');
 
 var sys = require(__dirname + '/../config/System');
-var db = mongoose.connect(sys.db_uri, {useMongoClient: true });
+var db = mongoose.connect(sys.db_uri);
 mongoose.Promise =require('bluebird');
 
 const Schema = mongoose.Schema;

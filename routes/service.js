@@ -193,12 +193,12 @@ router.post('/availableorders',async function(req, res){
     try {
       orders.forEach((order ,key) => {
         //console.log(key)
+        order.date.setHours( utc.getHours() + 3)
         let distanceInMeters = geolib.getPreciseDistance(
           { latitude: parseFloat(req.body.latitude), longitude: parseFloat(req.body.longitude) },
           { latitude: parseFloat(order.source.latitude), longitude: parseFloat(order.source.longitude) },
           1
         )
-
         order.proximity = distanceInMeters
       });
     } catch (e) {
