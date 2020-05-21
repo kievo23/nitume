@@ -179,8 +179,7 @@ router.post('/order/create', async function(req, res){
           title: 'New order has been received',
           body: "Mode: "+req.body.mode+', From: '+ order.source.placename+ " to: " +order.destination.placename
         },
-        topic: topic,
-        priority: 10
+        topic: topic
       };
 
       // Send a message to devices subscribed to the provided topic.
