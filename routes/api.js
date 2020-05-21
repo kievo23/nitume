@@ -149,8 +149,8 @@ router.post('/addreview',function(req, res){
 });
 
 router.post('/order/create', async function(req, res){
-  console.log(req.body);
-  
+  //console.log(req.body);
+
   let phone = "254"+req.body.userphone.substr(req.body.userphone.length - 9);
   let user = await User.findOne({phone: phone});
   if(user){
@@ -206,10 +206,10 @@ router.post('/order/create', async function(req, res){
             { 'postman-token': '4ca47976-a3bc-69d6-0cae-e80049f926e9',
               'cache-control': 'no-cache' } };
 
-        // request(options, function (error, response, body) {
-        //   if (error) throw new Error(error);
-        //   //console.log(body);
-        // });
+        request(options, function (error, response, body) {
+          if (error) throw new Error(error);
+          //console.log(body);
+        });
 
       res.json({code:100, msg: "Order Uploaded successfully"});
     }else{

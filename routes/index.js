@@ -33,7 +33,25 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/time', function(req, res, next) {
-  res.json({time: new Date().toString()})
+  let topic = 'newOrder';
+      let message = {
+        data: {
+          title: 'New order has been received',
+          body: "Mode: "+ "req.body.mode" +', From: '+ "order.source.placename"+ " to: " +"order.destination.placename"
+        },
+        topic: topic
+      };
+
+      // Send a message to devices subscribed to the provided topic.
+      settings.firebase.messaging().send(message)
+        .then((response) => {
+          // Response is a message ID string.
+          console.log('Successfully sent message:', response);
+        })
+        .catch((error) => {
+          console.log('Error sending message:', error);
+        });
+    res.send("notifications sent");
 })
 
 router.get('/notification', async function(req,res){
