@@ -149,7 +149,7 @@ router.post('/addreview',function(req, res){
 });
 
 router.post('/order/create', async function(req, res){
-  //console.log(req.body);
+  console.log(req.body);
   let phone = "254"+req.body.userphone.substr(req.body.userphone.length - 9);
   let user = await User.findOne({phone: phone});
   if(user){
