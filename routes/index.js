@@ -81,7 +81,7 @@ router.get('/notification', async function(req,res){
 });
 
 router.get('/orders', function(req, res, next) {
-  Order.find({},{'_id': 0,'_v': 0}).sort({"date": -1}).then(function(d){
+  Order.find({},{'_id': 0,'_v': 0}).sort({"date": -1}).populate('user').then(function(d){
     res.render('orders', { title: 'Nitume Orders', orders: d });
   })
 });
