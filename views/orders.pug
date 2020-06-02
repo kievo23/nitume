@@ -31,6 +31,9 @@ block content
             | Phone: 
             a(href=`tel:+${order.user.phone}`)
               =order.user.phone
+          li
+            a(href=`/order/${order.id}`)
+              | view
         p
           table
             each item in order.items

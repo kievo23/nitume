@@ -81,8 +81,14 @@ router.get('/notification', async function(req,res){
 });
 
 router.get('/orders', function(req, res, next) {
-  Order.find({},{'_id': 0,'_v': 0}).sort({"date": -1}).populate('user').then(function(d){
+  Order.find({},{'_v': 0}).sort({"date": -1}).populate('user').then(function(d){
     res.render('orders', { title: 'Nitume Orders', orders: d });
+  })
+});
+
+router.get('/order/:id', function(req, res, next) {
+  Order.findById(req.params.id).sort({"date": -1}).populate('user').populate('prof').then(function(d){
+    res.render('order', { title: 'Nitume Order:'+ d.id, order: d });
   })
 });
 
